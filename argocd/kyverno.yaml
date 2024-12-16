@@ -1,0 +1,43 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kyverno
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - matrix:
+      generators:
+        - list:
+            elements:
+            - name: test
+        - git:
+            repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
+            revision: HEAD
+            files:
+              - path: 'values/values-{{ .name }}-version.yaml'
+            values:
+              revision: '{{ dig "revision" "version_not_found" . }}'
+  template:
+    metadata:
+      name: '{{ .name }}-kyverno'
+    spec:
+      project: default
+      sources:
+        - chart: kyverno
+          repoURL: 'https://kyverno.github.io/kyverno'
+          targetRevision: '{{ .revision }}'
+          helm:
+            releaseName: kyverno
+            valueFiles:
+              - $kyverno/values/values-all.yaml
+              - $kyverno/values/values-{{.name}}.yaml
+              - $kyverno/values/values-{{.name}}-version.yaml
+        - repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
+          targetRevision: main
+          ref: kyverno
+      destination:
+        name: 'in-cluster'
+        namespace: kyverno
