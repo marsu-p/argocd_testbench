@@ -26,7 +26,7 @@ spec:
       sources:
         - chart: kyverno
           repoURL: 'https://kyverno.github.io/kyverno'
-          targetRevision: '{{ .revision }}'
+          targetRevision: '{{ dig .revision "version_not_found" . }}'
           helm:
             releaseName: kyverno
             valueFiles:
