@@ -11,6 +11,9 @@ spec:
   - matrix:
       generators:
         - clusters: {}
+        - list:
+            elements:
+            - foo: bar
         # - git:
         #     repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
         #     revision: HEAD
