@@ -15,12 +15,12 @@ spec:
             repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
             revision: HEAD
             files:
-              - path: 'values/values-{{ .name }}-version.yaml'
+              - path: 'values/values-test-version.yaml'
             values:
               revision: '{{ dig "revision" "version_not_found" . }}'
   template:
     metadata:
-      name: '{{ .name }}-kyverno'
+      name: 'test-kyverno'
     spec:
       project: default
       sources:
@@ -31,8 +31,8 @@ spec:
             releaseName: kyverno
             valueFiles:
               - $kyverno/values/values-all.yaml
-              - $kyverno/values/values-{{.name}}.yaml
-              - $kyverno/values/values-{{.name}}-version.yaml
+              - $kyverno/values/values-name.yaml
+              - $kyverno/values/values-name-version.yaml
         - repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
           targetRevision: main
           ref: kyverno
