@@ -11,16 +11,13 @@ spec:
   - matrix:
       generators:
         - clusters: {}
-        - list:
-            elements:
-            - foo: bar
-        # - git:
-        #     repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
-        #     revision: HEAD
-        #     files:
-        #       - path: 'values/values-{{ .name }}-version.yaml'
-        #     values:
-        #       revision: '{{ dig .name "version_not_found" . }}'
+        - git:
+            repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
+            revision: HEAD
+            files:
+              - path: 'values/values-{{ .name }}-version.yaml'
+            values:
+              revision: '{{ dig .name "version_not_found" . }}'
   template:
     metadata:
       name: '{{ .name }}-kyverno'
@@ -32,6 +29,9 @@ spec:
           targetRevision: '{{ dig "revision" "version_not_found" . }}'
           helm:
             releaseName: kyverno
+            parameters:
+              - name: "global.additionalLabels.argocd-enabled"
+                value: '{{ . }}'
             valueFiles:
               - $kyverno/values/values-all.yaml
               - $kyverno/values/values-{{ .name }}.yaml
