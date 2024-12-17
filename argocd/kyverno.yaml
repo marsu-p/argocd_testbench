@@ -10,9 +10,7 @@ spec:
   generators:
   - matrix:
       generators:
-        - list:
-            elements:
-            - name: test
+        - clusters: {}
         - git:
             repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
             revision: HEAD
