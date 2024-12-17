@@ -15,9 +15,7 @@ spec:
             repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
             revision: HEAD
             files:
-              - path: 'values/values-{{ .name }}-version.yaml'
-            values:
-              revision: '{{ dig .name "version_not_found" . }}'
+              - path: 'values/version-{{ index .metadata.labels "cluster_env" }}.yaml'
   template:
     metadata:
       name: '{{ .name }}-kyverno'
@@ -26,7 +24,7 @@ spec:
       sources:
         - chart: kyverno
           repoURL: 'https://kyverno.github.io/kyverno'
-          targetRevision: '{{ dig .name "version_not_found" . }}'
+          targetRevision: '{{ .values.revision }}'
           helm:
             releaseName: kyverno
             parameters:
@@ -40,5 +38,14 @@ spec:
           targetRevision: main
           ref: kyverno
       destination:
-        name: 'in-cluster'
+        name: '{{ .name }}'
         namespace: kyverno
+      syncPolicy:
+        syncOptions:
+          - PrunePropagationPolicy=background
+          - PruneLast=true
+          - RespectIgnoreDifferences=true
+          - ServerSideApply=true
+          - ApplyOutOfSyncOnly=true
+          - FailOnSharedResource=true
+          - CreateNamespace=false
