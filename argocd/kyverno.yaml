@@ -11,16 +11,16 @@ spec:
   - matrix:
       generators:
         - clusters: {}
-        - git:
-            repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
-            revision: HEAD
-            files:
-              - path: 'values/values-{{ .name }}-version.yaml'
-            values:
-              revision: '{{ dig .name "version_not_found" . }}'
+        # - git:
+        #     repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
+        #     revision: HEAD
+        #     files:
+        #       - path: 'values/values-{{ .name }}-version.yaml'
+        #     values:
+        #       revision: '{{ dig .name "version_not_found" . }}'
   template:
     metadata:
-      name: 'test-kyverno'
+      name: '{{ .name }}-kyverno'
     spec:
       project: default
       sources:
