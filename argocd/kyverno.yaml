@@ -31,8 +31,8 @@ spec:
             releaseName: kyverno
             valueFiles:
               - $kyverno/values/values-all.yaml
-              - $kyverno/values/values-name.yaml
-              - $kyverno/values/values-name-version.yaml
+              - $kyverno/values/values-test.yaml
+              - $kyverno/values/values-test-version.yaml
         - repoURL: 'https://github.com/marsu-p/argocd_testbench.git'
           targetRevision: main
           ref: kyverno
